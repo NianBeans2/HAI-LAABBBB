@@ -11,18 +11,11 @@
 <div id="stage">
 
   <div id="room-bg" aria-hidden="true">
-
-
     <div class="floor"></div>
-
-
     <div class="rug"></div>
-
   </div>
 
-
   <div id="confetti-container" aria-hidden="true"></div>
-
 
   <div id="ground"></div>
 
@@ -34,7 +27,7 @@
       <span class="key">S</span> move down<br>
       <span class="key">D</span> move right<br>
       <span class="key">SHIFT</span> sprint<br>
-</div>
+    </div>
   </div>
 
   <div id="speed-bar">
@@ -100,9 +93,10 @@
         there for me but also for staying with me at nights na pagod ka coming home from work. You'd always cheer me up when I feel low, you'd give me gifts 
         even if I didnt ask you, you always find ways to be funny and you always bring me to a smile. I could never ask for more, you're the world's best
         girlfriend there is and I'll never stop saying just how much I love you. I might not have been the perfect boyfriend, but in my own way I want to
-        tell you that I love you and that I'll always be here for you.</p>
-
-        <p>Imagine mo its been a year since nagkita tayo, we started from the humble beginnings of
+        tell you that I love you and that I'll always be here for you.
+      </p>
+      <p>
+        Imagine mo its been a year since nagkita tayo, we started from the humble beginnings of
         therapy and we gradually got closer because of grow a garden. If ikakasal tayo i-invite natin si Jandel. And from roblox we started climbing mountains
         we spent many nights to climb mountains sa peak until I climbed to the top kase namatay ka on the way up HAHAHAHAH, but I'll climb as many times as it 
         takes just for the both of us to get to the top. After climbing mountains nag-hunting naman tayo ng mga treasures sa REPO, though it sucked kase isang
@@ -112,16 +106,22 @@
         together. We've played through alot more games throughout the past year and all I can say is that I had and will always have fun playing when its together
         with you.
       </p>
-
       <p>
         A lot has happened within the last year, be it good or bad, you've always been there with me throughout. I want to be with you in every step you take, to
         support you just as much as how you supported me. You are the best laaaaaabbb and you will always be. I love you so much and I can't wait to be there together
         with you. I suck at letters talaga lab basta in a nutshell I love you and to more happy days to come for you and for us. I love yooouuuu mwaaa mwaaaaaaaa.
       </p>
-
       <p>I LOVE YOU BOI!</p>
 
-      <p>P.S. Will you be my girlfriend?</p>
+      <!-- ✦ YES / NO — appears when scrolled to bottom ✦ -->
+      <div id="yn-buttons">
+        <p class="yn-question">Will you still be my girlfriend? 💖</p>
+        <div class="yn-row">
+          <button class="yn-btn yn-yes" id="yn-yes-btn">YES 💖</button>
+          <button class="yn-btn yn-no"  id="yn-no-btn">NO 💔</button>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -203,16 +203,18 @@ upArrow.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' 
 downArrow.addEventListener('click', closePanel);
 downArrow.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') closePanel(); });
 
+/* ── Letter window ── */
 const letterContainer = document.getElementById('letter-container');
 const letterClose     = document.getElementById('letter-close');
 const letterText      = document.getElementById('letter-text');
+const ynButtons       = document.getElementById('yn-buttons');
+const ynYesBtn        = document.getElementById('yn-yes-btn');
+const ynNoBtn         = document.getElementById('yn-no-btn');
 
 function openLetter() {
   letterContainer.style.display = 'flex';
-  requestAnimationFrame(() => {
-    letterContainer.classList.add('open');
-  });
-  setTimeout(() => letterText.focus(), 400);
+  ynButtons.classList.remove('yn-visible');
+  requestAnimationFrame(() => { letterContainer.classList.add('open'); });
 }
 
 function closeLetter() {
@@ -229,7 +231,33 @@ letterContainer.addEventListener('click', e => {
   if (e.target === letterContainer) closeLetter();
 });
 
+/* scroll to reveal yes/no */
+letterText.addEventListener('scroll', () => {
+  const atBottom = letterText.scrollHeight - letterText.scrollTop - letterText.clientHeight < 30;
+  if (atBottom) ynButtons.classList.add('yn-visible');
+});
 
+/* YES — sweet response */
+ynYesBtn.addEventListener('click', () => {
+  const row = document.querySelector('.yn-row');
+  row.innerHTML = '<p class="yn-answer yn-answer-yes">YAY!! 💖💖💖<br><br>I love you so much!!</p>';
+});
+
+/* NO — button runs away on hover/click */
+ynNoBtn.addEventListener('mousemove', escapeNoBtn);
+ynNoBtn.addEventListener('click', escapeNoBtn);
+
+function escapeNoBtn() {
+  const btn = document.getElementById('yn-no-btn');
+  if (!btn) return;
+  const maxX = 180, maxY = 60;
+  const nx = (Math.random() - 0.5) * maxX * 2;
+  const ny = (Math.random() - 0.5) * maxY * 2;
+  btn.style.transform = `translate(${nx}px, ${ny}px)`;
+}
+
+
+/* ── Confetti ── */
 (function () {
   const container = document.getElementById('confetti-container');
   const COLORS = ['#f5a623', '#e94f4f', '#4ecdc4', '#ffe66d', '#a06cd5', '#6aad4e', '#fde68a'];
@@ -237,12 +265,10 @@ letterContainer.addEventListener('click', e => {
   function spawnPiece() {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
-
     const size     = 9 + Math.random() * 9;
     const duration = 3 + Math.random() * 2.2;
     const drift    = (Math.random() - 0.5) * 180;
     const spin     = 360 * (2 + Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);
-
     piece.style.left              = (Math.random() * STAGE_W) + 'px';
     piece.style.width             = size + 'px';
     piece.style.height            = (size * 0.4) + 'px';
@@ -251,24 +277,21 @@ letterContainer.addEventListener('click', e => {
     piece.style.setProperty('--drift', drift + 'px');
     piece.style.setProperty('--spin', spin + 'deg');
     piece.style.animationDuration = duration + 's';
-
     container.appendChild(piece);
     setTimeout(() => piece.remove(), duration * 1000 + 100);
   }
 
   function confettiBurst() {
     const count = 32 + Math.floor(Math.random() * 20);
-    for (let i = 0; i < count; i++) {
-      setTimeout(spawnPiece, i * 30);
-    }
-    const nextDelay = 7000 + Math.random() * 9000; // every ~7-16s
-    setTimeout(confettiBurst, nextDelay);
+    for (let i = 0; i < count; i++) setTimeout(spawnPiece, i * 30);
+    setTimeout(confettiBurst, 7000 + Math.random() * 9000);
   }
 
   setTimeout(confettiBurst, 2500);
 })();
 
 
+/* ── Cat sprites ── */
 const SPRITES = {
   front: ['cat_front_0.png', 'cat_front_1.png', 'cat_front_2.png'],
   back:  ['cat_back_0.png',  'cat_back_1.png',  'cat_back_2.png' ],
@@ -410,7 +433,7 @@ function openMouth() {
 }
 
 const chickens = [];
-const chickenImg = new Image();
+chickenImg = new Image();
 chickenImg.src = 'chicken.png';
 
 function spawnChicken() {
@@ -442,11 +465,9 @@ function updateChickens() {
   for (let i = chickens.length - 1; i >= 0; i--) {
     const c = chickens[i];
     if (c.done) continue;
-
     const dx = catCX - (c.x + c.size / 2);
     const dy = catCY - (c.y + c.size / 2);
     const dist = Math.sqrt(dx * dx + dy * dy);
-
     if (dist < 40) {
       c.done = true;
       c.el.remove();
@@ -458,7 +479,6 @@ function updateChickens() {
       catEl.style.height = sz + 'px';
       continue;
     }
-
     c.x += (dx / dist) * SPEED;
     c.y += (dy / dist) * SPEED;
     c.angle += 8;

@@ -498,7 +498,6 @@ body {
   object-fit: contain;
   image-rendering: pixelated;
   pointer-events: none;
-<<<<<<< HEAD
   z-index: 2;
 }
 
@@ -507,31 +506,14 @@ body {
   height: 58%;
   font-family: 'Press Start 2P', monospace;
   font-size: 10px;
-=======
-  z-index: 3;
-}
-
-#letter-text {
-  width: 84%;
-  height: 59%;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
->>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   line-height: 2;
   letter-spacing: 0;
   word-spacing: 0;
   color: #7a2828;
-<<<<<<< HEAD
   text-align: center;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 2px 8px px 8px;
-=======
-  text-align: left;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2px 8px 2px 8px;
->>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   scrollbar-width: thin;
   scrollbar-color: #c85a5a transparent;
 }
@@ -542,10 +524,6 @@ body {
 
 .letter-title {
   font-size: 15px;
-<<<<<<< HEAD
-=======
-  text-align: center;
->>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   color: #a03030;
   margin-bottom: 12px;
 }
@@ -578,7 +556,6 @@ body {
   color: #fff;
 }
 
-<<<<<<< HEAD
 
 /* ── Yes / No buttons ── */
 #yn-buttons {
@@ -662,8 +639,6 @@ body {
   100% { transform: scale(1);   opacity: 1; }
 }
 
-=======
->>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
 @keyframes floatEnvelope {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
