@@ -412,6 +412,9 @@ function update(ts) {
 
 let catScale = 1;
 const SCALE_STEP = 0.08;
+const SHRINK_DELAY = 1500; // ms before shrinking starts
+const SHRINK_RATE  = 0.0008; // scale units lost per ms
+let lastEatTs = 0;
 let mouthOpen = false;
 let mouthTimer = null;
 
@@ -474,6 +477,7 @@ function updateChickens() {
       chickens.splice(i, 1);
       openMouth();
       catScale += SCALE_STEP;
+      lastEatTs = performance.now();
       const sz = Math.round(96 * catScale);
       catEl.style.width  = sz + 'px';
       catEl.style.height = sz + 'px';
@@ -485,6 +489,17 @@ function updateChickens() {
     c.el.style.left      = c.x + 'px';
     c.el.style.top       = c.y + 'px';
     c.el.style.transform = `rotate(${c.angle}deg)`;
+  }
+
+  // Shrink back toward normal if no eating for SHRINK_DELAY ms
+  if (catScale > 1) {
+    const now = performance.now();
+    if (now - lastEatTs > SHRINK_DELAY) {
+      catScale = Math.max(1, catScale - SHRINK_RATE * 16);
+      const sz = Math.round(96 * catScale);
+      catEl.style.width  = sz + 'px';
+      catEl.style.height = sz + 'px';
+    }
   }
 
   requestAnimationFrame(updateChickens);
