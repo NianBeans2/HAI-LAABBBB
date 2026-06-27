@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHIKIN NI STRAVA</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="stage">
+
+  <div id="room-bg" aria-hidden="true">
+
+
+    <div class="floor"></div>
+
+
+    <div class="rug"></div>
+
+  </div>
+
+
+  <div id="confetti-container" aria-hidden="true"></div>
+
+
+  <div id="ground"></div>
+
+  <div id="hud">
+    <div class="title">CHIKIN NI STRAVA</div>
+    <div class="controls">
+      <span class="key">W</span> move up<br>
+      <span class="key">A</span> move left<br>
+      <span class="key">S</span> move down<br>
+      <span class="key">D</span> move right<br>
+      <span class="key">SHIFT</span> sprint<br>
+</div>
+  </div>
+
+  <div id="speed-bar">
+    <label>SPEED</label>
+    <div id="speed-track"><div id="speed-fill"></div></div>
+  </div>
+
+  <div id="dir-label">IDLE</div>
+
+  <div id="cat-wrap">
+    <img id="cat" src="cat_front.png" alt="pixel cat" draggable="false" />
+  </div>
+
+  <div id="meow">✦ meow ✦</div>
+
+  <div id="up-arrow" role="button" aria-label="Open letter panel" tabindex="0">
+    <div class="arrow-icon"></div>
+    <span class="arrow-label">OPEN</span>
+  </div>
+
+</div>
+
+<div id="letter-panel" role="dialog" aria-label="Letter" aria-hidden="true">
+  <canvas id="panel-stars"></canvas>
+
+  <div id="envelope-wrap">
+    <span id="envelope-label">A LETTER FOR YOU</span>
+
+    <div id="envelope" role="button" tabindex="0" aria-label="Open the letter">
+      <svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="28" width="152" height="78" rx="5" ry="5"
+              fill="#1a1228" stroke="#f5a623" stroke-width="2.5"/>
+        <polygon points="4,28 80,72 156,28"
+                 fill="#2a1a3e" stroke="#f5a623" stroke-width="2.5"
+                 stroke-linejoin="round"/>
+        <line x1="4" y1="106" x2="66" y2="68"
+              stroke="#f5a623" stroke-width="1.5" opacity="0.5"/>
+        <line x1="156" y1="106" x2="94" y2="68"
+              stroke="#f5a623" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="80" cy="80" r="12" fill="#f5a623" opacity="0.9"/>
+        <text x="80" y="85" text-anchor="middle"
+              font-size="13" fill="#0a0a18" font-family="serif">✦</text>
+      </svg>
+    </div>
+  </div>
+
+  <div id="down-arrow" role="button" aria-label="Close letter panel" tabindex="0">
+    <div class="arrow-icon"></div>
+    <span class="arrow-label">BACK</span>
+  </div>
+</div>
+
+<div id="letter-container">
+  <div class="letter-window">
+
+    <img id="letter-gif" src="cat_dance.gif" alt="decoration" onerror="this.style.display='none'" />
+
+    <div id="letter-text">
+      <p class="letter-title">Happy Birthday Love!</p>
+      <p>
+        I wish you a Happy Birthday<br>
+        may your days be filled with happiness and love. Haiii lab a year has gone by and malakas pa rin tayo. Firstly, I want to thank you not only for being
+        there for me but also for staying with me at nights na pagod ka coming home from work. You'd always cheer me up when I feel low, you'd give me gifts 
+        even if I didnt ask you, you always find ways to be funny and you always bring me to a smile. I could never ask for more, you're the world's best
+        girlfriend there is and I'll never stop saying just how much I love you. I might not have been the perfect boyfriend, but in my own way I want to
+        tell you that I love you and that I'll always be here for you.</p>
+
+        <p>Imagine mo its been a year since nagkita tayo, we started from the humble beginnings of
+        therapy and we gradually got closer because of grow a garden. If ikakasal tayo i-invite natin si Jandel. And from roblox we started climbing mountains
+        we spent many nights to climb mountains sa peak until I climbed to the top kase namatay ka on the way up HAHAHAHAH, but I'll climb as many times as it 
+        takes just for the both of us to get to the top. After climbing mountains nag-hunting naman tayo ng mga treasures sa REPO, though it sucked kase isang
+        beses lang tayo nakalaro dahil sa motion sickness ko, but I think we can do it again (I've conquered my Motion Sickness). After nun nagdrive naman tayo ng
+        RV sa bukid which also sucked kase isang beses lang rin tayo nakalaro and how I miss playing RV There Yet with you. After nyan gumawa tayo ng bahay sa
+        Minecraft, well you did all the building taga chop lang ako ng kahoy, I might have dozed off a couple lot more back then but I really did enjoy our time
+        together. We've played through alot more games throughout the past year and all I can say is that I had and will always have fun playing when its together
+        with you.
+      </p>
+
+      <p>
+        A lot has happened within the last year, be it good or bad, you've always been there with me throughout. I want to be with you in every step you take, to
+        support you just as much as how you supported me. You are the best laaaaaabbb and you will always be. I love you so much and I can't wait to be there together
+        with you. I suck at letters talaga lab basta in a nutshell I love you and to more happy days to come for you and for us. I love yooouuuu mwaaa mwaaaaaaaa.
+      </p>
+
+      <p>I LOVE YOU BOI!</p>
+    </div>
+
+  </div>
+  <button id="letter-close" aria-label="Close letter">✕</button>
+</div>
+
+
+
+<script>
+const STAGE_W = 1920, STAGE_H = 1080;
+const stage = document.getElementById('stage');
+
+function fitStage() {
+  const scale   = Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H);
+  const offsetX = (window.innerWidth  - STAGE_W * scale) / 2;
+  const offsetY = (window.innerHeight - STAGE_H * scale) / 2;
+  stage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+}
+window.addEventListener('resize', fitStage);
+fitStage();
+
+(function () {
+  const canvas = document.getElementById('panel-stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = [];
+    for (let i = 0; i < 120; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.3,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.02 + 0.005,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      s.phase += s.speed;
+      const a = 0.45 + 0.55 * Math.abs(Math.sin(s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,251,230,${a.toFixed(2)})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+
+const panel     = document.getElementById('letter-panel');
+const upArrow   = document.getElementById('up-arrow');
+const downArrow = document.getElementById('down-arrow');
+
+function openPanel() {
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden', 'false');
+  upArrow.style.display = 'none';
+}
+
+function closePanel() {
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden', 'true');
+  upArrow.style.display = '';
+}
+
+upArrow.addEventListener('click', openPanel);
+upArrow.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openPanel(); });
+downArrow.addEventListener('click', closePanel);
+downArrow.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') closePanel(); });
+
+const letterContainer = document.getElementById('letter-container');
+const letterClose     = document.getElementById('letter-close');
+const letterText      = document.getElementById('letter-text');
+
+function openLetter() {
+  letterContainer.style.display = 'flex';
+  requestAnimationFrame(() => {
+    letterContainer.classList.add('open');
+  });
+  setTimeout(() => letterText.focus(), 400);
+}
+
+function closeLetter() {
+  letterContainer.classList.remove('open');
+  setTimeout(() => { letterContainer.style.display = 'none'; }, 400);
+}
+
+document.getElementById('envelope').addEventListener('click', openLetter);
+document.getElementById('envelope').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') openLetter();
+});
+letterClose.addEventListener('click', closeLetter);
+letterContainer.addEventListener('click', e => {
+  if (e.target === letterContainer) closeLetter();
+});
+
+
+(function () {
+  const container = document.getElementById('confetti-container');
+  const COLORS = ['#f5a623', '#e94f4f', '#4ecdc4', '#ffe66d', '#a06cd5', '#6aad4e', '#fde68a'];
+
+  function spawnPiece() {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+
+    const size     = 9 + Math.random() * 9;
+    const duration = 3 + Math.random() * 2.2;
+    const drift    = (Math.random() - 0.5) * 180;
+    const spin     = 360 * (2 + Math.random() * 3) * (Math.random() < 0.5 ? -1 : 1);
+
+    piece.style.left              = (Math.random() * STAGE_W) + 'px';
+    piece.style.width             = size + 'px';
+    piece.style.height            = (size * 0.4) + 'px';
+    piece.style.background        = COLORS[Math.floor(Math.random() * COLORS.length)];
+    piece.style.borderRadius      = Math.random() < 0.5 ? '50%' : '1px';
+    piece.style.setProperty('--drift', drift + 'px');
+    piece.style.setProperty('--spin', spin + 'deg');
+    piece.style.animationDuration = duration + 's';
+
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), duration * 1000 + 100);
+  }
+
+  function confettiBurst() {
+    const count = 32 + Math.floor(Math.random() * 20);
+    for (let i = 0; i < count; i++) {
+      setTimeout(spawnPiece, i * 30);
+    }
+    const nextDelay = 7000 + Math.random() * 9000; // every ~7-16s
+    setTimeout(confettiBurst, nextDelay);
+  }
+
+  setTimeout(confettiBurst, 2500);
+})();
+
+
+const SPRITES = {
+  front: ['cat_front_0.png', 'cat_front_1.png', 'cat_front_2.png'],
+  back:  ['cat_back_0.png',  'cat_back_1.png',  'cat_back_2.png' ],
+  left:  ['cat_left_0.png',  'cat_left_1.png',  'cat_left_2.png' ],
+  right: ['cat_right_0.png', 'cat_right_1.png', 'cat_right_2.png'],
+};
+
+const loaded = {};
+for (const [dir, frames] of Object.entries(SPRITES)) {
+  loaded[dir] = frames.map(src => { const i = new Image(); i.src = src; return i; });
+}
+
+const catEl     = document.getElementById('cat');
+const catWrap   = document.getElementById('cat-wrap');
+const speedFill = document.getElementById('speed-fill');
+const meowEl    = document.getElementById('meow');
+const dirLabel  = document.getElementById('dir-label');
+
+const CAT_W = 96, CAT_H = 96;
+const BASE_SPEED = 3.2, SPRINT_MULT = 2.2;
+const FRAME_MS = 140;
+
+let pos          = { x: STAGE_W / 2 - CAT_W / 2, y: STAGE_H / 2 - CAT_H / 2 };
+let keys         = {};
+let currentDir   = 'front';
+let currentFrame = 0;
+let lastFrameTs  = 0;
+let lastPawTs    = 0;
+let meowTimer    = 0;
+
+function setSprite(dir, frame) {
+  if (mouthOpen) return;
+  const img = loaded[dir][frame];
+  if (img.complete) { catEl.src = img.src; }
+  else              { img.onload = () => { catEl.src = img.src; }; }
+}
+
+function triggerMeow() {
+  meowEl.style.left       = (pos.x + CAT_W + 8) + 'px';
+  meowEl.style.top        = (pos.y - 10) + 'px';
+  meowEl.style.transition = 'opacity 0s';
+  meowEl.style.opacity    = '1';
+  setTimeout(() => {
+    meowEl.style.transition = 'opacity 0.8s ease';
+    meowEl.style.opacity    = '0';
+  }, 600);
+}
+
+function spawnPaw() {
+  const paw = document.createElement('div');
+  paw.className  = 'paw';
+  paw.style.left = (pos.x + CAT_W / 2 - 4 + (Math.random() - 0.5) * 20) + 'px';
+  paw.style.top  = (pos.y + CAT_H - 6) + 'px';
+  stage.appendChild(paw);
+  setTimeout(() => paw.remove(), 1400);
+}
+
+function update(ts) {
+  if (panel.classList.contains('open')) { requestAnimationFrame(update); return; }
+
+  const sprint = keys['ShiftLeft'] || keys['ShiftRight'];
+  const speed  = BASE_SPEED * (sprint ? SPRINT_MULT : 1);
+
+  const goW = keys['KeyW'] || keys['ArrowUp'];
+  const goS = keys['KeyS'] || keys['ArrowDown'];
+  const goA = keys['KeyA'] || keys['ArrowLeft'];
+  const goD = keys['KeyD'] || keys['ArrowRight'];
+
+  let dx = 0, dy = 0;
+  if (goW) dy -= 1;
+  if (goS) dy += 1;
+  if (goA) dx -= 1;
+  if (goD) dx += 1;
+  if (dx !== 0 && dy !== 0) { dx *= 0.707; dy *= 0.707; }
+
+  pos.x = Math.max(0, Math.min(pos.x + dx * speed, STAGE_W - CAT_W));
+  pos.y = Math.max(0, Math.min(pos.y + dy * speed, STAGE_H - CAT_H - 80));
+
+  catWrap.style.left = pos.x + 'px';
+  catWrap.style.top  = pos.y + 'px';
+
+  const isMoving = dx !== 0 || dy !== 0;
+
+  let newDir = 'front', label = 'IDLE';
+  if      (goA && !goD)  { newDir = 'left';  label = 'LEFT  [A]'; }
+  else if (goD && !goA)  { newDir = 'right'; label = 'RIGHT [D]'; }
+  else if (goW && !goS)  { newDir = 'back';  label = 'UP    [W]'; }
+  else if (goS)          { newDir = 'front'; label = 'DOWN  [S]'; }
+
+  dirLabel.textContent = label;
+
+  if (isMoving) {
+    if (ts - lastFrameTs > FRAME_MS) { currentFrame = (currentFrame + 1) % 3; lastFrameTs = ts; }
+  } else {
+    currentFrame = 0;
+  }
+
+  currentDir = newDir;
+  setSprite(currentDir, currentFrame);
+
+  speedFill.style.width = (isMoving ? (sprint ? 100 : Math.round(100 / SPRINT_MULT)) : 0) + '%';
+
+  catWrap.style.filter = (sprint && isMoving)
+    ? 'drop-shadow(0 4px 12px rgba(80,40,10,0.6)) brightness(1.08)'
+    : 'drop-shadow(0 4px 8px rgba(80,40,10,0.4))';
+
+  if (isMoving && ts - lastPawTs > 140) { spawnPaw(); lastPawTs = ts; }
+
+  if (isMoving) {
+    meowTimer += 16;
+    if (meowTimer > 4000 + Math.random() * 2000) { triggerMeow(); meowTimer = 0; }
+  } else {
+    meowTimer = 0;
+  }
+
+  requestAnimationFrame(update);
+}
+
+let catScale = 1;
+const SCALE_STEP = 0.08;
+let mouthOpen = false;
+let mouthTimer = null;
+
+const sndEat    = new Audio('eat.mp3');
+const sndSwallo = new Audio('swallo.mp3');
+
+function openMouth() {
+  mouthOpen = true;
+  catEl.src = 'cat_open.png';
+  sndEat.currentTime = 0;
+  sndEat.play();
+  if (mouthTimer) clearTimeout(mouthTimer);
+  mouthTimer = setTimeout(() => {
+    mouthOpen = false;
+    mouthTimer = null;
+    sndSwallo.currentTime = 0;
+    sndSwallo.play();
+  }, 600);
+}
+
+const chickens = [];
+const chickenImg = new Image();
+chickenImg.src = 'chicken.png';
+
+function spawnChicken() {
+  const CHICKEN_SIZE = 72;
+  const side = Math.floor(Math.random() * 4);
+  let sx, sy;
+  if      (side === 0) { sx = Math.random() * STAGE_W; sy = -CHICKEN_SIZE; }
+  else if (side === 1) { sx = STAGE_W + CHICKEN_SIZE;  sy = Math.random() * STAGE_H; }
+  else if (side === 2) { sx = Math.random() * STAGE_W; sy = STAGE_H + CHICKEN_SIZE; }
+  else                 { sx = -CHICKEN_SIZE;            sy = Math.random() * STAGE_H; }
+
+  const el = document.createElement('img');
+  el.src = 'chicken.png';
+  el.className = 'chicken-piece';
+  el.style.width  = CHICKEN_SIZE + 'px';
+  el.style.height = CHICKEN_SIZE + 'px';
+  el.style.left   = sx + 'px';
+  el.style.top    = sy + 'px';
+  stage.appendChild(el);
+
+  chickens.push({ el, x: sx, y: sy, size: CHICKEN_SIZE, angle: 0, done: false });
+}
+
+function updateChickens() {
+  const catCX = pos.x + (96 * catScale) / 2;
+  const catCY = pos.y + (96 * catScale) / 2;
+  const SPEED = 9;
+
+  for (let i = chickens.length - 1; i >= 0; i--) {
+    const c = chickens[i];
+    if (c.done) continue;
+
+    const dx = catCX - (c.x + c.size / 2);
+    const dy = catCY - (c.y + c.size / 2);
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 40) {
+      c.done = true;
+      c.el.remove();
+      chickens.splice(i, 1);
+      openMouth();
+      catScale += SCALE_STEP;
+      const sz = Math.round(96 * catScale);
+      catEl.style.width  = sz + 'px';
+      catEl.style.height = sz + 'px';
+      continue;
+    }
+
+    c.x += (dx / dist) * SPEED;
+    c.y += (dy / dist) * SPEED;
+    c.angle += 8;
+    c.el.style.left      = c.x + 'px';
+    c.el.style.top       = c.y + 'px';
+    c.el.style.transform = `rotate(${c.angle}deg)`;
+  }
+
+  requestAnimationFrame(updateChickens);
+}
+requestAnimationFrame(updateChickens);
+
+catWrap.style.left = pos.x + 'px';
+catWrap.style.top  = pos.y + 'px';
+
+window.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  const blocked = ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'];
+  if (blocked.includes(e.code) && !panel.classList.contains('open')) e.preventDefault();
+  if (e.code === 'Space' && !panel.classList.contains('open') && !e.repeat) {
+    spawnChicken();
+  }
+});
+window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+requestAnimationFrame(update);
+</script>
+</body>
+</html>
