@@ -498,6 +498,16 @@ body {
   object-fit: contain;
   image-rendering: pixelated;
   pointer-events: none;
+<<<<<<< HEAD
+  z-index: 2;
+}
+
+#letter-text {
+  width: 80%;
+  height: 58%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+=======
   z-index: 3;
 }
 
@@ -506,14 +516,22 @@ body {
   height: 59%;
   font-family: 'Press Start 2P', monospace;
   font-size: 12px;
+>>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   line-height: 2;
   letter-spacing: 0;
   word-spacing: 0;
   color: #7a2828;
+<<<<<<< HEAD
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px 8px px 8px;
+=======
   text-align: left;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 2px 8px 2px 8px;
+>>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   scrollbar-width: thin;
   scrollbar-color: #c85a5a transparent;
 }
@@ -524,7 +542,10 @@ body {
 
 .letter-title {
   font-size: 15px;
+<<<<<<< HEAD
+=======
   text-align: center;
+>>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
   color: #a03030;
   margin-bottom: 12px;
 }
@@ -557,6 +578,92 @@ body {
   color: #fff;
 }
 
+<<<<<<< HEAD
+
+/* ── Yes / No buttons ── */
+#yn-buttons {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#yn-buttons.yn-visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.yn-question {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #a03030;
+  text-align: center;
+  line-height: 1.9;
+}
+
+.yn-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+}
+
+.yn-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 2px solid #c85a5a;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.15s ease;
+}
+
+.yn-yes {
+  background: #fde8e8;
+  color: #a03030;
+}
+
+.yn-yes:hover {
+  background: #c85a5a;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.yn-no {
+  background: #f5e8e8;
+  color: #888;
+  border-color: #c0a0a0;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.yn-answer {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  text-align: center;
+  line-height: 2;
+}
+
+.yn-answer-yes {
+  color: #a03030;
+  animation: ynPop 0.4s ease;
+}
+
+@keyframes ynPop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+=======
+>>>>>>> a5cc7d34f9f465b96163259a745bcf4fef29d1fa
 @keyframes floatEnvelope {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
